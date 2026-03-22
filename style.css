@@ -1,0 +1,84 @@
+body {
+    background-color: #0c0c0c;
+    color: #00ff00; /* Verde terminal clásico */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+#terminal {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.2;
+    width: 100%;
+}
+
+/* El cursor parpadeante */
+.cursor {
+    display: inline-block;
+    width: 10px;
+    height: 1em;
+    background-color: #00ff00;
+    animation: blink 1s step-end infinite;
+    vertical-align: bottom;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Estilo de las imágenes */
+.imagen-regalo {
+    max-width: 100%;
+    width: 400px;
+    border: 2px solid #00ff00;
+    margin-top: 15px;
+    display: block;
+}
+
+/* Botones estilo CMD */
+.cmd-btn {
+    background-color: transparent;
+    color: #00ff00;
+    border: 1px dashed #00ff00;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    padding: 8px 15px;
+    margin: 10px 10px 10px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    display: inline-block;
+}
+
+.cmd-btn:hover {
+    background-color: #00ff00;
+    color: #0c0c0c;
+    border: 1px solid #00ff00;
+}
+
+/* Evita que los botones ya clickeados se sigan viendo como botones activos */
+.cmd-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: transparent;
+    color: #00ff00;
+}
+
+/* Estilos para mensajes grandes */
+.mensaje-grande {
+    font-size: 32px;
+    font-weight: bold;
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00;
+    line-height: 1.5;
+    margin: 20px 0;
+}
