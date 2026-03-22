@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>¡Feliz Cumpleaños Gon! 🎉</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    /* ── Confetti canvas ── */
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Card ── */
+    .card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      padding: 3rem 3.5rem;
+      max-width: 700px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      animation: fadeUp 1s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Emoji cake ── */
+    .cake {
+      font-size: 5rem;
+      display: block;
+      margin-bottom: 0.6rem;
+      animation: bounce 1.2s ease infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-12px); }
+    }
+
+    /* ── Title ── */
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #f7971e, #ffd200, #f7971e);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shine 3s linear infinite;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes shine {
+      to { background-position: 200% center; }
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 2rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #f7971e, #ffd200);
+      border-radius: 2px;
+      margin: 0 auto 2rem;
+    }
+
+    /* ── Message ── */
+    .message {
+      font-size: 1.1rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.88);
+      margin-bottom: 2.4rem;
+    }
+
+    .message strong { color: #ffd200; }
+
+    /* ── Hearts row ── */
+    .hearts {
+      font-size: 1.8rem;
+      letter-spacing: 6px;
+      margin-bottom: 2rem;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.15); }
+    }
+
+    /* ── Button ── */
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2.4rem;
+      background: linear-gradient(135deg, #f7971e, #ffd200);
+      color: #1a1a2e;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 24px rgba(247,151,30,0.4);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(247,151,30,0.55);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 2.5rem;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ── Floating stars ── */
+    .stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 3px; height: 3px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0;
+      animation: twinkle var(--duration) var(--delay) ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(1); }
+      50%       { opacity: 0.8; transform: scale(1.5); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Confetti -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Birthday card -->
+  <div class="card">
+    <span class="cake">🎂</span>
+    <h1>¡Feliz Cumpleaños, Gon!</h1>
+    <p class="subtitle">✨ Un día muy especial ✨</p>
+    <div class="divider"></div>
+
+    <p class="message">
+      Hoy es un día para celebrarte tal como eres.<br />
+      Que este nuevo año de vida esté lleno de<br />
+      <strong>alegría</strong>, <strong>salud</strong>, <strong>aventuras</strong> y todo lo que<br />
+      tu corazón desea. 🌟<br /><br />
+      Que cada sueño encuentre su camino<br />
+      y que siempre tengas motivos para sonreír. 😊<br /><br />
+      <strong>¡Que la pases increíble, Gon!</strong>
+    </p>
+
+    <div class="hearts">💛 🎉 💛</div>
+
+    <button class="btn" id="celebrate-btn">🎊 ¡Celebrar!</button>
+
+    <p class="footer">Con mucho cariño 💙</p>
+  </div>
+
+  <script>
+    /* ── Stars ── */
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.setProperty('--duration', `${2 + Math.random() * 4}s`);
+      star.style.setProperty('--delay', `${Math.random() * 5}s`);
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top  = `${Math.random() * 100}%`;
+      starsContainer.appendChild(star);
+    }
+
+    /* ── Confetti ── */
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const COLORS = ['#f7971e','#ffd200','#e040fb','#00e5ff','#69f0ae','#ff4081'];
+
+    class Particle {
+      constructor() { this.reset(true); }
+
+      reset(initial = false) {
+        this.x     = Math.random() * canvas.width;
+        this.y     = initial ? Math.random() * canvas.height - canvas.height : -20;
+        this.w     = 6 + Math.random() * 8;
+        this.h     = 10 + Math.random() * 6;
+        this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        this.speed = 1.5 + Math.random() * 3;
+        this.angle = Math.random() * Math.PI * 2;
+        this.spin  = (Math.random() - 0.5) * 0.15;
+        this.drift = (Math.random() - 0.5) * 1.2;
+        this.opacity = 0.7 + Math.random() * 0.3;
+      }
+
+      update() {
+        this.y     += this.speed;
+        this.x     += this.drift;
+        this.angle += this.spin;
+        if (this.y > canvas.height + 30) this.reset();
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+        ctx.restore();
+      }
+    }
+
+    let particles = [];
+    let animating = false;
+
+    function spawnBurst(count) {
+      for (let i = 0; i < count; i++) {
+        const p  = new Particle();
+        p.y      = -Math.random() * 200;
+        p.speed  = 2 + Math.random() * 4;
+        particles.push(p);
+      }
+    }
+
+    function animate() {
+      if (!animating) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      // Remove particles that reset after falling; keep array bounded
+      if (particles.length > 300) particles.splice(0, particles.length - 300);
+      requestAnimationFrame(animate);
+    }
+
+    function startConfetti() {
+      if (animating) {
+        // extra burst
+        spawnBurst(80);
+        return;
+      }
+      animating = true;
+      spawnBurst(150);
+      animate();
+      // Auto-stop after 8 seconds
+      setTimeout(() => {
+        animating = false;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles = [];
+      }, 8000);
+    }
+
+    /* ── Button ── */
+    document.getElementById('celebrate-btn').addEventListener('click', startConfetti);
+
+    /* ── Auto-launch on load ── */
+    window.addEventListener('load', () => setTimeout(startConfetti, 600));
+  </script>
+
+</body>
+</html>
